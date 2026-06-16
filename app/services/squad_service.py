@@ -11,7 +11,7 @@ from app.models.team import Team, TeamSquad
 class SquadService:
     """Calculate team strength adjustments based on squad quality and injuries."""
 
-    VALUE_PER_GOAL = 0.15  # Every 100M EUR market value difference ≈ +0.15 xG
+    VALUE_PER_GOAL = 0.10  # Every 100M EUR market value difference ≈ +0.10 xG (was 0.15)
 
     SEVERITY_WEIGHTS = {
         "轻伤": 0.5,
@@ -94,8 +94,8 @@ class SquadService:
         if away_value <= 0:
             return 1.0
         ratio = home_value / away_value
-        # Log relationship: 2x value ≈ +0.10 xG
-        return 1.0 + 0.10 * math.log2(max(ratio, 0.1))
+        # Log relationship: 2x value ≈ +0.05 xG (was +0.10 — reduced for realism)
+        return 1.0 + 0.05 * math.log2(max(ratio, 0.1))
 
     @staticmethod
     def injury_to_xg_modifier(injury_score: float) -> float:

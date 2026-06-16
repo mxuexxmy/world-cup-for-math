@@ -86,13 +86,13 @@ class PredictionEngine:
 
         # Apply external factor adjustments
         if factors:
-            # Home crowd and weather advantage
-            crowd_factor = 1.0 + 0.03 * (factors.home_crowd_support - 50) / 50
+            # Home crowd and weather advantage (reduced crowd impact)
+            crowd_factor = 1.0 + 0.015 * (factors.home_crowd_support - 50) / 50
             home_xg *= crowd_factor
 
-            # Motivation affects both teams' attack
-            home_xg *= 0.9 + 0.002 * factors.motivation_factor
-            away_xg *= 0.9 + 0.002 * factors.motivation_factor
+            # Motivation affects both teams' attack (reduced range)
+            home_xg *= 0.95 + 0.001 * factors.motivation_factor
+            away_xg *= 0.95 + 0.001 * factors.motivation_factor
 
             # Altitude reduces away team output
             if factors.altitude_advantage > 20:
@@ -137,16 +137,35 @@ class PredictionEngine:
         final_draw /= total
         final_away /= total
 
-        # Confidence based on Elo gap
+        # Group stage draw boost — draws are more common in early tournament stages
+        # Historical World Cup group stage draw rate ≈ 26% vs ~20% knockout
+        if match.stage == "小组赛":
+            draw_boost = 0.04  # +4pp to draw probability (moderate, based on historical data)
+            final_draw += draw_boost
+            final_home -= draw_boost * final_home / (final_home + final_away)
+            final_away -= draw_boost * final_away / (final_home + final_away)
+            # Re-normalize
+            total = final_home + final_draw + final_away
+            final_home /= total
+            final_draw /= total
+            final_away /= total
+
+        # Confidence based on multiple factors (not just Elo gap)
         elo_gap = abs(home.elo_rating - away.elo_rating)
+
+        # Base confidence from Elo gap (but capped lower)
         if elo_gap > 300:
-            confidence = 85.0
+            base_conf = 70.0
         elif elo_gap > 150:
-            confidence = 70.0
+            base_conf = 60.0
         elif elo_gap > 50:
-            confidence = 55.0
+            base_conf = 50.0
         else:
-            confidence = 40.0
+            base_conf = 35.0
+
+        # Reduce confidence when draw probability is high (uncertain outcome)
+        draw_penalty = final_draw * 25  # Higher draw prob → less confident
+        confidence = max(25.0, min(75.0, base_conf - draw_penalty))
 
         # Store prediction
         result = await self.db.execute(
@@ -178,7 +197,7 @@ class PredictionEngine:
         else:
             pred = Prediction(
                 match_id=match_id,
-                model_version="1.0",
+                model_version="1.1",
                 prob_home_win=round(final_home, 4),
                 prob_draw=round(final_draw, 4),
                 prob_away_win=round(final_away, 4),
@@ -198,7 +217,7 @@ class PredictionEngine:
 
     def _score_probability_matrix(self, home_xg: float, away_xg: float) -> dict:
         """Generate score probability matrix with Dixon-Coles low-score correction."""
-        rho = -0.13
+        rho = -0.13  # Standard Dixon-Coles correlation parameter
         matrix = {}
 
         for h in range(self.MAX_GOALS + 1):

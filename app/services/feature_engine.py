@@ -92,13 +92,14 @@ class FeatureEngine:
 
     @staticmethod
     def _elo_win_prob(elo_home: float, elo_away: float) -> float:
-        diff = elo_home + 100 - elo_away
+        diff = elo_home + 60 - elo_away
         return 1.0 / (1.0 + 10.0 ** (-diff / 400.0))
 
     @staticmethod
     def _elo_draw_prob(elo_home: float, elo_away: float) -> float:
-        diff = (elo_home + 100) - elo_away
-        return 0.28 * math.exp(-(diff ** 2) / (2 * 200 ** 2))
+        diff = (elo_home + 60) - elo_away
+        draw = 0.30 * math.exp(-(diff ** 2) / (2 * 280 ** 2))
+        return draw
 
     @staticmethod
     def _stage_weight(stage: str) -> float:

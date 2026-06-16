@@ -7,9 +7,9 @@ class EloService:
     """Elo rating system with World Cup-specific adjustments."""
 
     K_FACTOR = 60        # World Cup K-factor (higher = more responsive)
-    HOME_ADVANTAGE = 100 # Base home advantage in Elo points
+    HOME_ADVANTAGE = 60  # Base home advantage in Elo points (reduced from 100 — too aggressive)
     HOST_BONUS = 80      # Additional bonus for host nation
-    LEAGUE_AVG_GOALS = 1.35  # Average goals per team in international football
+    LEAGUE_AVG_GOALS = 1.25  # Average goals per team in international football (reduced from 1.35)
 
     @staticmethod
     def expected_result(elo_a: float, elo_b: float) -> float:
@@ -31,8 +31,9 @@ class EloService:
         p_home = EloService.expected_result(adjusted_elo_home, elo_away)
 
         # Draw probability: peaks when teams are equal, decays with Elo difference
-        draw_peak = 0.28  # Max draw probability when teams are perfectly matched
-        draw_sigma = 200  # How fast draw probability decays with Elo difference
+        # Calibrated for international tournament football (~26% draw rate in group stages)
+        draw_peak = 0.30  # Max draw probability when teams are perfectly matched (was 0.28)
+        draw_sigma = 280  # Decay rate — wider than original 200 but not overfit to 9 games
         p_draw = draw_peak * math.exp(-(diff ** 2) / (2 * draw_sigma ** 2))
 
         # Adjust win/loss to accommodate draw
@@ -47,22 +48,22 @@ class EloService:
         """
         Calculate expected goals using a calibrated linear model.
         Based on real international football data:
-        - Equal teams: ~1.35 xG each
-        - 200 Elo advantage: ~1.80 vs 0.90
-        - 400 Elo advantage: ~2.30 vs 0.60
+        - Equal teams: ~1.25 xG each
+        - 200 Elo advantage: ~1.65 vs 0.85
+        - 400 Elo advantage: ~2.05 vs 0.55
         """
         effective_elo = elo_team + home_bonus
         diff = effective_elo - elo_opponent
 
         # Linear xG model: more stable than exponential
-        # Every 100 Elo points ≈ +0.25 xG
-        xg = EloService.LEAGUE_AVG_GOALS + diff / 400.0
+        # Every 100 Elo points ≈ +0.20 xG (was 0.25 — reduced for realism)
+        xg = EloService.LEAGUE_AVG_GOALS + diff / 500.0
 
         # Soft cap: apply diminishing returns for large Elo differences
-        if xg > 2.5:
-            xg = 2.5 + (xg - 2.5) * 0.3  # Diminishing returns above 2.5
-        if xg > 3.5:
-            xg = 3.5  # Hard cap at 3.5 xG
+        if xg > 2.2:
+            xg = 2.2 + (xg - 2.2) * 0.25  # Diminishing returns above 2.2 (was 2.5/0.3)
+        if xg > 3.0:
+            xg = 3.0  # Hard cap at 3.0 xG (was 3.5)
 
         return max(xg, 0.15)
 
