@@ -55,7 +55,8 @@ async def dashboard(request: Request, db: AsyncSession = Depends(get_db)):
     # Recent results (finished today)
     result = await db.execute(
         select(Match)
-        .options(selectinload(Match.home_team), selectinload(Match.away_team))
+        .options(selectinload(Match.home_team), selectinload(Match.away_team),
+                 selectinload(Match.prediction))
         .where(and_(Match.status == "finished", Match.match_date >= today_start))
         .order_by(Match.match_date.desc())
         .limit(10)

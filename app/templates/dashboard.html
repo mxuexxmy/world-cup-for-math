@@ -67,6 +67,20 @@
             <div class="match-meta">
                 {{ m.match_date.strftime('%H:%M') }} | {{ m.stage }} | {{ m.city }}
             </div>
+            {% if m.prediction and m.home_score is not none %}
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">
+                预测: {{ (m.prediction.prob_home_win*100)|round }}/{{ (m.prediction.prob_draw*100)|round }}/{{ (m.prediction.prob_away_win*100)|round }}
+                {% if m.home_score > m.away_score and m.prediction.prob_home_win >= m.prediction.prob_draw and m.prediction.prob_home_win >= m.prediction.prob_away_win %}
+                <span style="color:var(--green);"> 正确</span>
+                {% elif m.away_score > m.home_score and m.prediction.prob_away_win >= m.prediction.prob_home_win and m.prediction.prob_away_win >= m.prediction.prob_draw %}
+                <span style="color:var(--green);"> 正确</span>
+                {% elif m.home_score == m.away_score and m.prediction.prob_draw >= m.prediction.prob_home_win and m.prediction.prob_draw >= m.prediction.prob_away_win %}
+                <span style="color:var(--green);"> 正确</span>
+                {% else %}
+                <span style="color:var(--accent);"> 错误</span>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </a>
     {% endfor %}
