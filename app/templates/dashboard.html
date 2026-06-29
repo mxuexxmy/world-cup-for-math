@@ -42,11 +42,13 @@
     <h1 class="page-title" style="margin-bottom:0;">{{ now.month }}月{{ now.day }}日 比赛 (北京时间)</h1>
     <div style="display:flex; gap:0.5rem;">
         <button class="btn btn-primary" hx-post="/api/predict-all" hx-swap="none"
-                data-toast data-toast-success="预测生成完成" data-toast-reload="true">
+                data-toast data-toast-loading="正在生成全部预测，请稍候…"
+                data-toast-success="预测生成完成" data-toast-reload="true">
             生成预测
         </button>
         <button class="btn" style="background:var(--blue);color:#fff;" hx-post="/api/refresh" hx-swap="none"
-                data-toast data-toast-success="比分已刷新" data-toast-error="刷新失败（可能需要管理员权限）" data-toast-reload="true">
+                data-toast data-toast-loading="正在同步 FIFA 比分…"
+                data-toast-success="比分已刷新" data-toast-error="刷新失败（可能需要管理员权限）" data-toast-reload="true">
             刷新比分
         </button>
     </div>

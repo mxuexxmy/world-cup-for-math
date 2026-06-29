@@ -114,7 +114,8 @@
             <button class="btn btn-primary" style="margin-top:0.5rem;"
                     hx-post="/api/predictions/generate/{{ match.id }}"
                     hx-swap="none"
-                    data-toast data-toast-success="本场预测已生成" data-toast-reload="true">
+                    data-toast data-toast-loading="正在分析本场比赛…"
+                    data-toast-success="本场预测已生成" data-toast-reload="true">
                 🔮 生成预测
             </button>
         </div>

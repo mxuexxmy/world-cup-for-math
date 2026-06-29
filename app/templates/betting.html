@@ -19,7 +19,8 @@
             </div>
         </div>
         <button class="btn btn-primary" hx-post="/betting/api/optimize" hx-swap="none"
-                data-toast data-toast-success="优化完成" data-toast-error="优化失败" data-toast-reload="true">
+                data-toast data-toast-loading="正在运行优化器，请稍候…"
+                data-toast-success="优化完成" data-toast-error="优化失败" data-toast-reload="true">
             🔄 运行优化器
         </button>
     </div>
@@ -42,7 +43,8 @@
                 <span>建议: <strong>¥{{ "%.2f"|format(rec.suggested_stake) }}</strong></span>
                 <button class="btn btn-sm" style="background:var(--green);color:#fff;padding:4px 12px;border-radius:4px;"
                         hx-post="/api/place-bet/{{ rec.id }}" hx-swap="none"
-                        data-toast data-toast-success="跟注成功" data-toast-error="跟注失败" data-toast-reload="true">
+                        data-toast data-toast-loading="提交注单中…"
+                        data-toast-success="跟注成功" data-toast-error="跟注失败" data-toast-reload="true">
                     跟注
                 </button>
             </div>
@@ -83,7 +85,8 @@
                 <span>建议: <strong>¥{{ "%.2f"|format(rec.suggested_stake) }}</strong></span>
                 <button class="btn btn-sm" style="background:var(--green);color:#fff;padding:4px 12px;border-radius:4px;"
                         hx-post="/api/place-bet/{{ rec.id }}" hx-swap="none"
-                        data-toast data-toast-success="跟注成功" data-toast-error="跟注失败" data-toast-reload="true">
+                        data-toast data-toast-loading="提交注单中…"
+                        data-toast-success="跟注成功" data-toast-error="跟注失败" data-toast-reload="true">
                     跟注
                 </button>
             </div>
@@ -110,7 +113,8 @@
                         <td>{% if entry.result == 'pending' %}
                             <button class="btn btn-sm" style="background:var(--accent);color:#fff;padding:2px 8px;font-size:0.7rem;"
                                     hx-post="/api/cancel-bet/{{ entry.id }}" hx-swap="none"
-                                    data-toast data-toast-success="已撤销注单" data-toast-error="撤销失败" data-toast-reload="true">撤销</button>
+                                    data-toast data-toast-loading="撤销注单中…"
+                                    data-toast-success="已撤销注单" data-toast-error="撤销失败" data-toast-reload="true">撤销</button>
                         {% endif %}</td>
                     </tr>
                     {% endfor %}
