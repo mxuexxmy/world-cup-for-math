@@ -211,6 +211,59 @@
             .match-grid { grid-template-columns: 1fr; }
             .nav-links { gap: 1rem; }
             .form-row { grid-template-columns: 1fr; }
+            .two-col-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* Workflow guide */
+        .workflow-steps {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+        .workflow-step {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            font-size: 0.85rem;
+        }
+        .workflow-step.active {
+            border-color: var(--gold);
+            background: rgba(240,192,64,0.1);
+        }
+        .workflow-step.done {
+            border-color: var(--green);
+            opacity: 0.85;
+        }
+        .workflow-step-num {
+            font-weight: 800;
+            color: var(--gold);
+            margin-right: 0.35rem;
+        }
+        .workflow-step.done .workflow-step-num { color: var(--green); }
+
+        /* Alerts */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .alert-success {
+            background: rgba(46,204,113,0.15);
+            border: 1px solid var(--green);
+            color: var(--green);
+        }
+
+        /* Table scroll on mobile */
+        .table-scroll { overflow-x: auto; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(1rem); }
+            to { opacity: 1; transform: translateX(0); }
         }
     </style>
 </head>
@@ -230,6 +283,68 @@
 
     {% block scripts %}{% endblock %}
     <script>
+        function showToast(message, type) {
+            type = type || 'success';
+            var container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.style.cssText = 'position:fixed;top:70px;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;max-width:min(360px,calc(100vw - 2rem));';
+                document.body.appendChild(container);
+            }
+            var toast = document.createElement('div');
+            var bg = type === 'error' ? 'var(--accent)' : (type === 'info' ? 'var(--blue)' : 'var(--green)');
+            toast.style.cssText = 'padding:0.75rem 1.25rem;border-radius:8px;font-size:0.9rem;font-weight:600;color:#fff;background:' + bg + ';box-shadow:0 4px 12px rgba(0,0,0,0.3);animation:toastIn 0.2s ease;';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(function() { toast.remove(); }, 4000);
+        }
+
+        function toastMessageFromResponse(data, fallback) {
+            if (!data) return fallback;
+            if (data.predicted !== undefined) {
+                if (data.errors > 0) {
+                    return '已生成 ' + data.predicted + ' 场，' + data.errors + ' 场失败（数据库可能需重新 seed）';
+                }
+                return '已生成 ' + data.predicted + ' 场预测';
+            }
+            if (data.updates !== undefined) return '已更新 ' + data.updates + ' 场比赛比分';
+            if (data.total_bets !== undefined) return '已生成 ' + data.total_bets + ' 条投注推荐';
+            if (data.placed !== undefined) return '跟注成功 ¥' + (data.total_stake || 0).toFixed(2);
+            if (data.cancelled !== undefined) return '已撤销注单';
+            if (data.status === 'ok' && data.match_id) return '本场预测已生成';
+            return fallback;
+        }
+
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            var el = evt.detail.elt;
+            if (!el || !el.hasAttribute('data-toast')) return;
+            var successMsg = el.getAttribute('data-toast-success') || '操作成功';
+            var errorMsg = el.getAttribute('data-toast-error') || '操作失败，请重试';
+            if (evt.detail.successful) {
+                var msg = successMsg;
+                try {
+                    var data = JSON.parse(evt.detail.xhr.responseText);
+                    msg = toastMessageFromResponse(data, successMsg);
+                } catch (e) {}
+                showToast(msg, 'success');
+                if (el.getAttribute('data-toast-reload') === 'true') {
+                    setTimeout(function() { location.reload(); }, 900);
+                }
+            } else {
+                var detail = errorMsg;
+                try {
+                    var errData = JSON.parse(evt.detail.xhr.responseText);
+                    if (errData.detail) {
+                        detail = typeof errData.detail === 'string' ? errData.detail : errorMsg;
+                    } else if (errData.error) {
+                        detail = errData.error;
+                    }
+                } catch (e) {}
+                showToast(detail, 'error');
+            }
+        });
+
         // Auto-refresh live data every 60s
         document.addEventListener('DOMContentLoaded', function() {
             setInterval(function() {

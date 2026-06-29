@@ -22,7 +22,7 @@
     {% if match.referee_name %}· 👨‍⚖️ {{ match.referee_name }}{% endif %}
 </div>
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+<div class="two-col-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
 
     <!-- LEFT: Team info -->
     <div>
@@ -113,10 +113,10 @@
             <p style="color:var(--text-muted);">预测尚未生成</p>
             <button class="btn btn-primary" style="margin-top:0.5rem;"
                     hx-post="/api/predictions/generate/{{ match.id }}"
-                    hx-target="#predict-status" hx-swap="innerHTML">
+                    hx-swap="none"
+                    data-toast data-toast-success="本场预测已生成" data-toast-reload="true">
                 🔮 生成预测
             </button>
-            <div id="predict-status" style="margin-top:0.5rem;"></div>
         </div>
         {% endif %}
 

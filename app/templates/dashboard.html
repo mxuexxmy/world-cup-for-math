@@ -11,29 +11,72 @@
 </div>
 {% endif %}
 
-<div style="display:flex; justify-content:space-between; align-items:center;">
-    <h1 class="page-title">{{ now.month }}月{{ now.day }}日 比赛 (北京时间)</h1>
+<div class="card" style="margin-bottom:1.5rem; border-color:var(--blue); background:rgba(52,152,219,0.08);">
+    <div class="card-header" style="margin-bottom:0.25rem;">🧭 三步上手</div>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin:0;">
+        按顺序完成：生成预测 → 运行优化器 → 跟注推荐
+        {% if scheduled_count > 0 %}
+        （未开赛 {{ scheduled_count }} 场，已预测 {{ predicted_scheduled }} 场，推荐 {{ recommendation_count }} 条）
+        {% endif %}
+    </p>
+    <div class="workflow-steps">
+        <div class="workflow-step {% if workflow_step == 1 %}active{% elif workflow_step > 1 %}done{% endif %}">
+            <span class="workflow-step-num">①</span>
+            <strong>生成预测</strong>
+            <div style="color:var(--text-muted); margin-top:0.25rem;">分析赛前数据</div>
+        </div>
+        <div class="workflow-step {% if workflow_step == 2 %}active{% elif workflow_step > 2 %}done{% endif %}">
+            <span class="workflow-step-num">②</span>
+            <strong><a href="/betting" style="color:inherit;">投注推荐</a></strong>
+            <div style="color:var(--text-muted); margin-top:0.25rem;">运行优化器</div>
+        </div>
+        <div class="workflow-step {% if workflow_step == 3 %}active{% elif workflow_step > 3 %}done{% endif %}">
+            <span class="workflow-step-num">③</span>
+            <strong><a href="/betting" style="color:inherit;">跟注</a></strong>
+            <div style="color:var(--text-muted); margin-top:0.25rem;">选择价值投注</div>
+        </div>
+    </div>
+</div>
+
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <h1 class="page-title" style="margin-bottom:0;">{{ now.month }}月{{ now.day }}日 比赛 (北京时间)</h1>
     <div style="display:flex; gap:0.5rem;">
         <button class="btn btn-primary" hx-post="/api/predict-all" hx-swap="none"
-                onclick="this.textContent='...'; setTimeout(()=>location.reload(),3000)">
+                data-toast data-toast-success="预测生成完成" data-toast-reload="true">
             生成预测
         </button>
         <button class="btn" style="background:var(--blue);color:#fff;" hx-post="/api/refresh" hx-swap="none"
-                onclick="this.textContent='...'; setTimeout(()=>location.reload(),3000)">
+                data-toast data-toast-success="比分已刷新" data-toast-error="刷新失败（可能需要管理员权限）" data-toast-reload="true">
             刷新比分
         </button>
     </div>
 </div>
 
-{% if not today_matches or (today_matches and not today_matches[0].prediction) %}
-<div class="card" style="text-align:center; padding:1rem; margin-bottom:1rem; background:rgba(52,152,219,0.1); border-color:var(--blue);">
-    <p style="margin:0;">点击 <strong>「生成预测」</strong> 按钮，AI 将分析所有赛前数据并生成预测</p>
+{% if finished_matches %}
+<h2 class="page-title" style="margin-top:1.5rem; font-size:1.2rem;">🏁 今日赛果</h2>
+<div class="match-grid">
+    {% for m in finished_matches %}
+    <a href="/match/{{ m.id }}" style="text-decoration:none; color:inherit;">
+        <div class="match-card">
+            <span class="status status-finished">已结束</span>
+            <div class="match-teams">
+                <span class="team-name">{% if m.home_team %}{{ m.home_team.name_cn }}{% else %}—{% endif %}</span>
+                <span class="score">{{ m.home_score }} - {{ m.away_score }}</span>
+                <span class="team-name">{% if m.away_team %}{{ m.away_team.name_cn }}{% else %}—{% endif %}</span>
+            </div>
+            <div class="match-meta">
+                {{ m.match_date.strftime('%H:%M') }} | {{ m.stage }} | {{ m.city }}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
 </div>
 {% endif %}
 
 {% if today_matches %}
-<div class="match-grid">
+<div class="match-grid" style="margin-top:1rem;">
     {% for m in today_matches %}
+    {% if m.status != 'finished' %}
     <a href="/match/{{ m.id }}" style="text-decoration:none; color:inherit;">
         <div class="match-card">
             <span class="status status-{{ m.status }}">
@@ -77,25 +120,16 @@
                 <span>负 {{ (m.prediction.prob_away_win*100)|round }}%</span>
             </div>
             {% endif %}
-
-            {% if m.prediction and m.status == 'finished' and m.home_score is not none %}
-            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">
-                预测: {{ (m.prediction.prob_home_win*100)|round }}/{{ (m.prediction.prob_draw*100)|round }}/{{ (m.prediction.prob_away_win*100)|round }}
-                {% if m.home_score > m.away_score and m.prediction.prob_home_win >= m.prediction.prob_draw and m.prediction.prob_home_win >= m.prediction.prob_away_win %}
-                <span style="color:var(--green);"> 正确</span>
-                {% elif m.away_score > m.home_score and m.prediction.prob_away_win >= m.prediction.prob_home_win and m.prediction.prob_away_win >= m.prediction.prob_draw %}
-                <span style="color:var(--green);"> 正确</span>
-                {% elif m.home_score == m.away_score and m.prediction.prob_draw >= m.prediction.prob_home_win and m.prediction.prob_draw >= m.prediction.prob_away_win %}
-                <span style="color:var(--green);"> 正确</span>
-                {% else %}
-                <span style="color:var(--accent);"> 错误</span>
-                {% endif %}
-            </div>
-            {% endif %}
         </div>
     </a>
+    {% endif %}
     {% endfor %}
 </div>
+{% if not today_matches|selectattr('status', 'ne', 'finished')|list %}
+<div class="card" style="text-align:center; padding:2rem; margin-top:1rem;">
+    <p style="color:var(--text-muted);">今天暂无未结束比赛{% if finished_matches %}，赛果见上方{% endif %}</p>
+</div>
+{% endif %}
 {% else %}
 <div class="card" style="text-align:center; padding:3rem;">
     <p style="font-size:1.2rem; color:var(--text-muted);">今天没有比赛安排</p>

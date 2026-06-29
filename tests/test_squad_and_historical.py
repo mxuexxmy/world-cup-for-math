@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 import pytest
+from sqlalchemy import select, func
 
 ROOT = Path(__file__).resolve().parent.parent
 HIST = ROOT / "data" / "historical" / "world_cup_matches.json"
@@ -37,16 +38,11 @@ def test_historical_training_features():
 
 def test_seed_squads_generates_26_per_team():
     from data.seed.seed_squads import seed_squads, POSITIONS
-    from app.models.database import init_db_sync, SyncSession, migrate_db_sync
+    from app.models.database import SyncSession
     from app.models.team import Team, TeamSquad
-    from sqlalchemy import select, func
 
-    migrate_db_sync()
     session = SyncSession()
     try:
-        session.query(TeamSquad).delete()
-        session.query(Team).delete()
-        session.commit()
         t = Team(
             name_cn="测试", name_en="Test", fifa_code="TST",
             fifa_ranking=50, elo_rating=1600, elo_rating_initial=1600,

@@ -2,11 +2,13 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 
 from app.templates_env import jinja_env
 from app.models.database import get_db
-from app.models.prediction import BetRecommendation
+from app.models.prediction import BetRecommendation, BetLedger
+from app.models.match import Match
 
 router = APIRouter(prefix="/betting", tags=["Betting"])
 
@@ -30,9 +32,44 @@ async def betting_page(request: Request, db: AsyncSession = Depends(get_db)):
 
     # Get recent ledger entries
     result = await db.execute(
-        select(BetLedger).order_by(BetLedger.created_at.desc()).limit(20)
+        select(BetLedger)
+        .options(
+            selectinload(BetLedger.match).selectinload(Match.home_team),
+            selectinload(BetLedger.match).selectinload(Match.away_team),
+        )
+        .order_by(BetLedger.created_at.desc())
+        .limit(20)
     )
     ledger = result.scalars().all()
+
+    # Enrich parlay legs with team names from matches when missing
+    leg_match_ids = set()
+    for entry in ledger:
+        for leg in entry.get_legs():
+            if leg.get("match_id") and not leg.get("home_team"):
+                leg_match_ids.add(leg["match_id"])
+    if leg_match_ids:
+        result = await db.execute(
+            select(Match)
+            .options(selectinload(Match.home_team), selectinload(Match.away_team))
+            .where(Match.id.in_(leg_match_ids))
+        )
+        match_map = {m.id: m for m in result.scalars().all()}
+        for entry in ledger:
+            legs = entry.get_legs()
+            if not legs:
+                continue
+            changed = False
+            for leg in legs:
+                if leg.get("home_team"):
+                    continue
+                m = match_map.get(leg.get("match_id"))
+                if m:
+                    leg["home_team"] = m.home_team.name_cn
+                    leg["away_team"] = m.away_team.name_cn
+                    changed = True
+            if changed:
+                entry.set_legs(legs)
 
     template = jinja_env.get_template("betting.html")
     html = template.render(

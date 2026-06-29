@@ -36,7 +36,14 @@
 
 ## 🚀 快速开始
 
+### Windows（推荐，无需懂命令行）
 
+1. 安装 [Python 3.10+](https://www.python.org/downloads/)，安装时勾选 **Add python.exe to PATH**
+2. 双击 **`首次安装.bat`**（仅需一次，含虚拟环境与模型训练）
+3. 以后双击 **`启动.bat`** 即可使用
+4. 可选：**`重置数据.bat`** 重新导入赛程；**`更新模型.bat`** 重新训练预测模型
+
+### 命令行
 
 ```bash
 pip install -r requirements.txt
@@ -48,9 +55,7 @@ python data/seed/seed_database.py
 python run.py
 ```
 
-
-
-Docker:
+### Docker
 
 
 

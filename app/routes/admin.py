@@ -3,6 +3,7 @@ from fastapi import APIRouter, Request, Depends, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from sqlalchemy.orm import selectinload
 from datetime import datetime
 
 from app.auth import require_admin
@@ -19,8 +20,11 @@ router = APIRouter(prefix="/admin", tags=["Admin"], dependencies=[Depends(requir
 @router.get("/", response_class=HTMLResponse)
 async def admin_panel(request: Request, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
-        select(Match).where(Match.status.in_(["scheduled", "live"]))
-        .order_by(Match.match_date).limit(50)
+        select(Match)
+        .options(selectinload(Match.home_team), selectinload(Match.away_team))
+        .where(Match.status.in_(["scheduled", "live"]))
+        .order_by(Match.match_date)
+        .limit(50)
     )
     matches = result.scalars().all()
 
@@ -39,6 +43,7 @@ async def admin_panel(request: Request, db: AsyncSession = Depends(get_db)):
         match_count=match_count,
         team_count=team_count,
         pred_count=pred_count,
+        saved=request.query_params.get("updated") == "1",
         title="管理后台",
     )
     return HTMLResponse(html)
@@ -97,11 +102,13 @@ async def admin_predict_all(db: AsyncSession = Depends(get_db)):
     )
     matches = result.scalars().all()
     count = 0
+    errors = 0
     for match in matches:
         try:
             await ExternalFactorsService.evaluate_match(db, match.id)
             await engine.predict_match(match.id)
             count += 1
         except Exception as e:
+            errors += 1
             print(f"[Admin] predict {match.id}: {e}")
-    return {"status": "ok", "predicted": count, "total": len(matches)}
+    return {"status": "ok", "predicted": count, "total": len(matches), "errors": errors}

@@ -3,12 +3,12 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, func
 from sqlalchemy.orm import selectinload
 from app.templates_env import jinja_env
 from app.models.database import get_db
 from app.models.match import Match
-from app.models.team import Team
+from app.models.prediction import Prediction, BetRecommendation
 
 router = APIRouter(prefix="", tags=["Dashboard"])
 
@@ -62,6 +62,25 @@ async def dashboard(request: Request, db: AsyncSession = Depends(get_db)):
     )
     finished_matches = result.scalars().all()
 
+    scheduled_count = await db.scalar(
+        select(func.count()).select_from(Match).where(Match.status == "scheduled")
+    ) or 0
+    predicted_scheduled = await db.scalar(
+        select(func.count(Prediction.id))
+        .join(Match, Prediction.match_id == Match.id)
+        .where(Match.status == "scheduled")
+    ) or 0
+    recommendation_count = await db.scalar(select(func.count()).select_from(BetRecommendation)) or 0
+
+    if scheduled_count == 0:
+        workflow_step = 0
+    elif predicted_scheduled < scheduled_count:
+        workflow_step = 1
+    elif recommendation_count == 0:
+        workflow_step = 2
+    else:
+        workflow_step = 3
+
     template = jinja_env.get_template("dashboard.html")
     html = template.render(
         request=request,
@@ -69,6 +88,10 @@ async def dashboard(request: Request, db: AsyncSession = Depends(get_db)):
         upcoming_matches=upcoming_matches,
         live_matches=live_matches,
         finished_matches=finished_matches,
+        workflow_step=workflow_step,
+        scheduled_count=scheduled_count,
+        predicted_scheduled=predicted_scheduled,
+        recommendation_count=recommendation_count,
         now=now_bj,
         title="2026世界杯预测 - 仪表盘",
     )
@@ -92,12 +115,14 @@ async def predict_all_matches(db: AsyncSession = Depends(get_db)):
     matches = result.scalars().all()
 
     count = 0
+    errors = 0
     for match in matches:
         try:
             await ExternalFactorsService.evaluate_match(db, match.id)
             await engine.predict_match(match.id)
             count += 1
         except Exception as e:
+            errors += 1
             print(f"Error predicting match {match.id}: {e}")
 
-    return {"status": "ok", "predicted": count, "total": len(matches)}
+    return {"status": "ok", "predicted": count, "total": len(matches), "errors": errors}

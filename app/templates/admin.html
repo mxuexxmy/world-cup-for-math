@@ -3,15 +3,20 @@
 
 <h1 class="page-title">⚙ 管理后台</h1>
 
-<div style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem;">
+{% if saved %}
+<div class="alert alert-success">✓ 已保存</div>
+{% endif %}
+
+<div class="two-col-grid" style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem;">
     <!-- Update Match Results -->
     <div>
         <div class="card">
             <div class="card-header">📝 更新比赛结果</div>
-            <div style="max-height:500px; overflow-y:auto;">
+            <div class="table-scroll" style="max-height:500px; overflow-y:auto;">
                 <table>
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>时间</th>
                             <th>比赛</th>
                             <th>状态</th>
@@ -22,8 +27,11 @@
                     <tbody>
                         {% for m in matches %}
                         <tr>
+                            <td><code>#{{ m.id }}</code></td>
                             <td>{{ m.match_date.strftime('%m/%d %H:%M') }}</td>
-                            <td>{{ m.home_team.name_cn }} vs {{ m.away_team.name_cn }}</td>
+                            <td>
+                                <a href="/match/{{ m.id }}" style="color:inherit;">{{ m.home_team.name_cn }} vs {{ m.away_team.name_cn }}</a>
+                            </td>
                             <td>
                                 <span class="status status-{{ m.status }}">
                                     {{ m.status }}
@@ -55,10 +63,20 @@
             <div class="card-header">🎲 手动录入赔率</div>
             <form method="POST" action="/admin/match/{{ matches[0].id if matches else 1 }}/odds" id="odds-form">
                 <div class="form-group">
-                    <label>比赛ID</label>
-                    <input type="number" name="match_id_display" id="odds-match-id"
-                           value="{{ matches[0].id if matches else '' }}" placeholder="输入比赛ID"
-                           onchange="document.getElementById('odds-form').action='/admin/match/'+this.value+'/odds'">
+                    <label>选择比赛</label>
+                    <select id="odds-match-id" name="match_id_display"
+                            onchange="document.getElementById('odds-form').action='/admin/match/'+this.value+'/odds'">
+                        {% if not matches %}
+                        <option value="">暂无未开赛比赛</option>
+                        {% else %}
+                        {% for m in matches %}
+                        <option value="{{ m.id }}">#{{ m.id }} · {{ m.match_date.strftime('%m/%d %H:%M') }} · {{ m.home_team.name_cn }} vs {{ m.away_team.name_cn }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.35rem;">
+                        ID 为数据库主键，种子时按赛程顺序从 1 编号；也可在左侧表格或 <a href="/">仪表盘</a> 点进比赛详情，URL 中 <code>/match/85</code> 的数字即为 ID。
+                    </p>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -82,14 +100,15 @@
         <div class="card">
             <div class="card-header">⚡ 快捷操作</div>
             <button class="btn btn-primary" style="width:100%; margin-bottom:0.5rem;"
-                    hx-post="/betting/api/optimize" hx-target="body">
+                    hx-post="/betting/api/optimize" hx-swap="none"
+                    data-toast data-toast-success="投注优化完成" data-toast-reload="true">
                 🔄 重新运行投注优化
             </button>
             <button class="btn" style="width:100%; background:var(--blue); color:#fff;"
-                    hx-post="/admin/predict-all" hx-target="#predict-result" hx-swap="innerHTML">
+                    hx-post="/admin/predict-all" hx-swap="none"
+                    data-toast data-toast-success="预测生成完成" data-toast-reload="true">
                 🔮 生成全部预测
             </button>
-            <div id="predict-result" style="margin-top:0.5rem;font-size:0.85rem;"></div>
         </div>
 
         <!-- System Info -->

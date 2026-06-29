@@ -125,6 +125,26 @@ class BetLedger(Base):
     settled_at = Column(DateTime, nullable=True)
 
     recommendation = relationship("BetRecommendation")
+    match = relationship("Match")
+
+    def display_match_label(self) -> str:
+        """Human-readable match label for ledger UI."""
+        legs = self.get_legs()
+        if legs:
+            parts = []
+            for leg in legs:
+                home = leg.get("home_team")
+                away = leg.get("away_team")
+                if home and away:
+                    parts.append(f"{home} vs {away}")
+                else:
+                    parts.append(f"#{leg.get('match_id', '?')}")
+            if self.bet_type != "单关" and len(parts) > 1:
+                return f"{self.bet_type}: " + " / ".join(parts)
+            return parts[0] if parts else f"#{self.match_id}"
+        if self.match and self.match.home_team and self.match.away_team:
+            return f"{self.match.home_team.name_cn} vs {self.match.away_team.name_cn}"
+        return f"#{self.match_id}"
 
     def get_legs(self):
         if not self.legs_json:

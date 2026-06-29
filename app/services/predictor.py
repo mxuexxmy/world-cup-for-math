@@ -45,6 +45,12 @@ class PredictionEngine:
 
         home = match.home_team
         away = match.away_team
+        if not home or not away:
+            raise ValueError(
+                f"Match {match_id} 缺少球队数据 "
+                f"(home_team_id={match.home_team_id}, away_team_id={match.away_team_id})。"
+                f"请重新运行: python data/seed/seed_database.py"
+            )
 
         # Ensure external factors are evaluated
         factors = match.external_factors
