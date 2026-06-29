@@ -77,13 +77,27 @@ if errorlevel 1 (
 
 :step_install_deps
 echo [2/7] 安装 Python 依赖（可能需要几分钟）...
-"%PIP%" install -r "%ROOT%\requirements.txt"
+REM 清除失效代理（VPN/抓包软件残留会导致 pip ProxyError 10061）
+set "HTTP_PROXY="
+set "HTTPS_PROXY="
+set "http_proxy="
+set "https_proxy="
+set "ALL_PROXY="
+set "all_proxy="
+
+"%PIP%" install --proxy="" -r "%ROOT%\requirements.txt"
 if errorlevel 1 (
-    echo       官方源失败，尝试国内镜像重试 ...
-    "%PIP%" install -r "%ROOT%\requirements.txt" -i https://pypi.tuna.tsinghua.edu.cn/simple
+    echo       官方源失败，尝试清华镜像 ...
+    "%PIP%" install --proxy="" -r "%ROOT%\requirements.txt" -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn
 )
 if errorlevel 1 (
-    echo [错误] 依赖安装失败，请检查网络后重试。
+    echo       清华源失败，尝试阿里云镜像 ...
+    "%PIP%" install --proxy="" -r "%ROOT%\requirements.txt" -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+)
+if errorlevel 1 (
+    echo [错误] 依赖安装失败。
+    echo       若日志含 ProxyError，请关闭 VPN/系统代理后重试，
+    echo       或在「设置 - 网络和 Internet - 代理」中关闭手动代理。
     pause
     exit /b 1
 )
