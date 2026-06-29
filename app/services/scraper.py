@@ -1,4 +1,4 @@
-"""Dongqiudi data scraper — live scores, results, injuries."""
+"""FIFA match sync — live scores, results, injuries (Dongqiudi fallback)."""
 import json
 import httpx
 from typing import Optional, List, Dict
@@ -13,8 +13,8 @@ from app.models.team import Team
 from app.models.prediction import Prediction, MatchResult
 
 
-class DongqiudiScraper:
-    """Scrape live match data from FIFA API, Dongqiudi and other sources."""
+class FifaMatchSync:
+    """Sync live match data from FIFA API; Dongqiudi as optional fallback."""
 
     BASE_URL = "https://dongqiudi.com"
     API_BASE = "https://www.dongqiudi.com"
@@ -44,7 +44,7 @@ class DongqiudiScraper:
         updates = []
 
         # Method 1: FIFA API (primary, reliable)
-        updates = await DongqiudiScraper._fetch_fifa_scores(db)
+        updates = await FifaMatchSync._fetch_fifa_scores(db)
 
         # Method 2: Dongqiudi API (fallback, often blocked)
         if not updates:
@@ -61,9 +61,9 @@ class DongqiudiScraper:
                     if resp.status_code == 200:
                         data = resp.json()
                         if isinstance(data, dict) and "data" in data:
-                            raw = DongqiudiScraper._extract_scores(data["data"])
+                            raw = FifaMatchSync._extract_scores(data["data"])
                             for u in raw:
-                                await DongqiudiScraper._apply_score_update(db, u)
+                                await FifaMatchSync._apply_score_update(db, u)
                             updates = raw
             except Exception as e:
                 print(f"[Scraper] Dongqiudi fetch: {e}")
@@ -125,8 +125,8 @@ class DongqiudiScraper:
         away_code: str,
     ) -> bool:
         """Update knockout placeholders when FIFA assigns real teams."""
-        new_home_id = await DongqiudiScraper._resolve_team_id(db, home_code or "TBD")
-        new_away_id = await DongqiudiScraper._resolve_team_id(db, away_code or "TBD")
+        new_home_id = await FifaMatchSync._resolve_team_id(db, home_code or "TBD")
+        new_away_id = await FifaMatchSync._resolve_team_id(db, away_code or "TBD")
         changed = False
         if new_home_id and match.home_team_id != new_home_id:
             match.home_team_id = new_home_id
@@ -178,8 +178,8 @@ class DongqiudiScraper:
         """Sync stadium, weather and referee from a FIFA calendar row. Returns True if changed."""
         changed = False
         stadium = fifa_row.get("Stadium") or {}
-        stadium_name = DongqiudiScraper._fifa_locale_desc(stadium.get("Name"))
-        city_name = DongqiudiScraper._fifa_locale_desc(stadium.get("CityName"))
+        stadium_name = FifaMatchSync._fifa_locale_desc(stadium.get("Name"))
+        city_name = FifaMatchSync._fifa_locale_desc(stadium.get("CityName"))
 
         if stadium_name and match.stadium != stadium_name:
             match.stadium = stadium_name
@@ -192,7 +192,7 @@ class DongqiudiScraper:
         weather = fifa_row.get("Weather") or {}
         temp = weather.get("Temperature")
         humidity = weather.get("Humidity")
-        weather_desc = DongqiudiScraper._fifa_locale_desc(weather.get("TypeLocalized"))
+        weather_desc = FifaMatchSync._fifa_locale_desc(weather.get("TypeLocalized"))
 
         if temp is not None and match.temperature != temp:
             match.temperature = temp
@@ -206,7 +206,7 @@ class DongqiudiScraper:
 
         for official in fifa_row.get("Officials") or []:
             if official.get("OfficialType") == 1:
-                ref_name = DongqiudiScraper._fifa_locale_desc(official.get("Name"))
+                ref_name = FifaMatchSync._fifa_locale_desc(official.get("Name"))
                 ref_country = official.get("IdCountry", "")
                 if ref_name and match.referee_name != ref_name:
                     match.referee_name = ref_name
@@ -229,14 +229,14 @@ class DongqiudiScraper:
         try:
             async with httpx.AsyncClient(timeout=20) as client:
                 resp = await client.get(
-                    DongqiudiScraper.FIFA_API,
+                    FifaMatchSync.FIFA_API,
                     params={
                         "idCompetition": FIFA_COMPETITION_ID,
                         "idSeason": FIFA_SEASON_ID,
                         "language": "en",
                         "count": 500,
                     },
-                    headers=DongqiudiScraper.FIFA_HTTP_HEADERS,
+                    headers=FifaMatchSync.FIFA_HTTP_HEADERS,
                     follow_redirects=True,
                 )
                 if resp.status_code != 200:
@@ -254,18 +254,18 @@ class DongqiudiScraper:
                     away_code = away.get("IdCountry") or ""
                     fifa_match_id = str(r.get("IdMatch", ""))
 
-                    home_name = DongqiudiScraper._fifa_locale_desc(home.get("TeamName")) or "TBD"
-                    away_name = DongqiudiScraper._fifa_locale_desc(away.get("TeamName")) or "TBD"
-                    fifa_dt = DongqiudiScraper._parse_fifa_datetime(r.get("Date", ""))
+                    home_name = FifaMatchSync._fifa_locale_desc(home.get("TeamName")) or "TBD"
+                    away_name = FifaMatchSync._fifa_locale_desc(away.get("TeamName")) or "TBD"
+                    fifa_dt = FifaMatchSync._parse_fifa_datetime(r.get("Date", ""))
 
-                    match = await DongqiudiScraper._find_match_by_fifa_id(db, fifa_match_id)
+                    match = await FifaMatchSync._find_match_by_fifa_id(db, fifa_match_id)
                     swap_scores = False
                     if not match and home_code and away_code:
-                        match = await DongqiudiScraper._find_match_by_fifa_codes(
+                        match = await FifaMatchSync._find_match_by_fifa_codes(
                             db, home_code, away_code, fifa_dt
                         )
                         if not match:
-                            match = await DongqiudiScraper._find_match_by_fifa_codes(
+                            match = await FifaMatchSync._find_match_by_fifa_codes(
                                 db, away_code, home_code, fifa_dt
                             )
                             swap_scores = match is not None
@@ -278,15 +278,15 @@ class DongqiudiScraper:
                             )
                         continue
 
-                    teams_changed = await DongqiudiScraper._sync_fifa_teams(
+                    teams_changed = await FifaMatchSync._sync_fifa_teams(
                         db, match, home_code, away_code
                     )
-                    metadata_changed = DongqiudiScraper._sync_fifa_match_metadata(match, r)
+                    metadata_changed = FifaMatchSync._sync_fifa_match_metadata(match, r)
                     if teams_changed or metadata_changed:
                         await db.flush()
 
                     raw_status = r.get("MatchStatus", 1)
-                    status = DongqiudiScraper.FIFA_STATUS_MAP.get(raw_status, "scheduled")
+                    status = FifaMatchSync.FIFA_STATUS_MAP.get(raw_status, "scheduled")
                     home_score = r.get("HomeTeamScore")
                     away_score = r.get("AwayTeamScore")
 
@@ -304,7 +304,7 @@ class DongqiudiScraper:
                     )
 
                     prev = (match.home_score, match.away_score, match.status)
-                    await DongqiudiScraper._update_match_score(
+                    await FifaMatchSync._update_match_score(
                         db, match, home_score, away_score, status
                     )
                     if (match.home_score, match.away_score, match.status) != prev:
@@ -404,7 +404,7 @@ class DongqiudiScraper:
             for m in matches:
                 if (m.home_team.name_cn == home_name and
                     m.away_team.name_cn == away_name):
-                    await DongqiudiScraper._update_match_score(
+                    await FifaMatchSync._update_match_score(
                         db, m, update["home_score"],
                         update["away_score"], update["status"]
                     )
@@ -424,63 +424,12 @@ class DongqiudiScraper:
 
         print(f"[Scraper] Updated: {match.home_team.name_cn} {home_score}-{away_score} {match.away_team.name_cn}")
 
-        # If match finished, update Elo and regenerate predictions
+        # If match finished, run full settlement pipeline
         if status == "finished":
-            from app.services.elo import EloService
-            from app.services.predictor import PredictionEngine
-            from app.models.prediction import MatchResult
-
-            # Determine winner
-            if home_score > away_score:
-                winner, loser = match.home_team, match.away_team
-                goal_diff = home_score - away_score
-                is_draw = False
-            elif away_score > home_score:
-                winner, loser = match.away_team, match.home_team
-                goal_diff = away_score - home_score
-                is_draw = False
-            else:
-                # Draw
-                winner, loser = match.home_team, match.away_team
-                goal_diff = 0
-                is_draw = True
-
-            # Update Elo
-            new_win, new_lose = EloService.update_elo(
-                winner.elo_rating, loser.elo_rating, goal_diff, is_draw
-            )
-            winner.elo_rating = new_win
-            loser.elo_rating = new_lose
-            await db.flush()
-
-            # Record result
-            result = MatchResult(
-                match_id=match.id,
-                actual_home_score=home_score,
-                actual_away_score=away_score,
-            )
-            db.add(result)
-            await db.commit()
-
-            print(f"[Scraper] Elo updated: {winner.name_cn} {new_win}, {loser.name_cn} {new_lose}")
-
-            # Settle bets for this match
-            from app.services.bet_optimizer import BetOptimizer
-            await BetOptimizer.settle_bets_for_match(db, match.id, home_score, away_score)
-
-            # Regenerate predictions for remaining matches
-            engine = PredictionEngine(db)
-            remaining = await db.execute(
-                select(Match).where(Match.status == "scheduled").limit(30)
-            )
-            for m in remaining.scalars().all():
-                try:
-                    await engine.predict_match(m.id)
-                except Exception:
-                    pass
-            print(f"[Scraper] Predictions regenerated")
+            from app.services.match_settlement import settle_finished_match
+            await settle_finished_match(db, match, home_score, away_score)
+            print("[FifaMatchSync] Match settled: Elo, bets, predictions updated")
         else:
-            # Live or other status — still need to commit the score update
             await db.commit()
 
     @staticmethod
@@ -490,16 +439,14 @@ class DongqiudiScraper:
         try:
             async with httpx.AsyncClient(timeout=10) as client:
                 resp = await client.get(
-                    f"{DongqiudiScraper.API_BASE}/global/2026-worldcup",
+                    f"{FifaMatchSync.API_BASE}/global/2026-worldcup",
                     headers={"User-Agent": "Mozilla/5.0"}
                 )
                 if resp.status_code == 200:
                     text = resp.text
-                    # Look for injury-related keywords
                     keywords = ["伤病", "受伤", "伤缺", "缺席", "injury", "injured"]
                     for kw in keywords:
                         if kw in text.lower():
-                            # Extract surrounding text
                             idx = text.lower().find(kw.lower())
                             snippet = text[max(0, idx-100):idx+200]
                             injuries.append({"keyword": kw, "snippet": snippet[:150]})
@@ -521,7 +468,11 @@ class DongqiudiScraper:
         if not match:
             return {"error": "Match not found"}
 
-        await DongqiudiScraper._update_match_score(
+        await FifaMatchSync._update_match_score(
             db, match, home_score, away_score, "finished"
         )
         return {"status": "ok", "match_id": match_id}
+
+
+# Backward-compatible alias
+DongqiudiScraper = FifaMatchSync

@@ -2,14 +2,22 @@
 import math
 from typing import Tuple
 
+from app.config import (
+    ELO_K_FACTOR,
+    ELO_HOME_ADVANTAGE,
+    ELO_HOST_BONUS_L1,
+    ELO_HOST_BONUS_L2,
+    ELO_HOST_BONUS_L3,
+    LEAGUE_AVG_GOALS,
+)
+
 
 class EloService:
     """Elo rating system with World Cup-specific adjustments."""
 
-    K_FACTOR = 60        # World Cup K-factor (higher = more responsive)
-    HOME_ADVANTAGE = 60  # Base home advantage in Elo points (reduced from 100 — too aggressive)
-    HOST_BONUS = 80      # Additional bonus for host nation
-    LEAGUE_AVG_GOALS = 1.25  # Average goals per team in international football (reduced from 1.35)
+    K_FACTOR = ELO_K_FACTOR
+    HOME_ADVANTAGE = ELO_HOME_ADVANTAGE
+    LEAGUE_AVG_GOALS = LEAGUE_AVG_GOALS
 
     @staticmethod
     def expected_result(elo_a: float, elo_b: float) -> float:
@@ -117,11 +125,19 @@ class EloService:
         """
         if is_host:
             if match_country.upper() == host_country.upper():
-                return 100.0  # L1: Home country
+                return ELO_HOST_BONUS_L1
             elif match_country.upper() in ("USA", "CAN", "MEX"):
-                return 50.0   # L2: Co-host country
-            else:
-                return 30.0   # L3: Regional advantage
+                return ELO_HOST_BONUS_L2
+            return ELO_HOST_BONUS_L3
         elif confederation == "CONCACAF":
-            return 30.0       # Regional familiarity bonus
+            return ELO_HOST_BONUS_L3
         return 0.0
+
+    @staticmethod
+    def update_elo_draw(elo_a: float, elo_b: float, k: float = None) -> Tuple[float, float]:
+        """Symmetric Elo update for a draw."""
+        if k is None:
+            k = EloService.K_FACTOR
+        expected_a = EloService.expected_result(elo_a, elo_b)
+        transfer = k * 0.5 * (0.5 - expected_a)
+        return round(elo_a + transfer, 1), round(elo_b - transfer, 1)

@@ -6,7 +6,7 @@ from app.models.prediction import Prediction, BetRecommendation, MatchResult
 from app.models.external_factors import ExternalFactors
 
 __all__ = [
-    "Base", "engine", "get_db", "init_db",
+    "Base", "async_engine", "sync_engine", "get_db", "init_db",
     "Team", "TeamSquad", "Match", "Group",
     "Odds", "Prediction", "BetRecommendation", "MatchResult",
     "ExternalFactors",

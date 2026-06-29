@@ -21,30 +21,41 @@ FIFA_COMPETITION_ID = os.getenv("FIFA_COMPETITION_ID", "17")
 FIFA_SEASON_ID = os.getenv("FIFA_SEASON_ID", "285023")
 
 # Elo config
-ELO_K_FACTOR = 60
-ELO_HOME_ADVANTAGE = 100
-ELO_HOST_BONUS = 80
-LEAGUE_AVG_GOALS = 1.35  # Average goals per team per match
+ELO_K_FACTOR = float(os.getenv("ELO_K_FACTOR", "60"))
+ELO_HOME_ADVANTAGE = float(os.getenv("ELO_HOME_ADVANTAGE", "60"))
+ELO_HOST_BONUS_L1 = float(os.getenv("ELO_HOST_BONUS_L1", "100"))
+ELO_HOST_BONUS_L2 = float(os.getenv("ELO_HOST_BONUS_L2", "50"))
+ELO_HOST_BONUS_L3 = float(os.getenv("ELO_HOST_BONUS_L3", "30"))
+LEAGUE_AVG_GOALS = float(os.getenv("LEAGUE_AVG_GOALS", "1.25"))
 
-# Model ensemble weights (dynamic, these are starting values)
-ELO_WEIGHT = 0.35
-POISSON_WEIGHT = 0.25
-XGBOOST_WEIGHT = 0.40
+# Model ensemble weights (Elo + Poisson + ML)
+ELO_WEIGHT = float(os.getenv("ELO_WEIGHT", "0.40"))
+POISSON_WEIGHT = float(os.getenv("POISSON_WEIGHT", "0.35"))
+ML_WEIGHT = float(os.getenv("ML_WEIGHT", "0.25"))
 
 # Betting
-MAX_STAKE_PCT = 0.05       # Max 5% per single bet
-MAX_DAILY_STAKE_PCT = 0.20 # Max 20% of bankroll per day
-MIN_ODDS = 1.50            # Minimum odds to consider
-MAX_PARLAY = 4             # Max teams in parlay (体彩 limit)
-KELLY_FRACTION = 0.25      # 1/4 Kelly for safety
-STOP_LOSS_STREAK = 3       # After 3 consecutive losses, reduce to 1/8 Kelly
-STOP_LOSS_FRACTION = 0.125 # 1/8 Kelly after stop-loss triggered
+INITIAL_BANKROLL = float(os.getenv("INITIAL_BANKROLL", "10000"))
+MAX_STAKE_PCT = float(os.getenv("MAX_STAKE_PCT", "0.05"))
+MAX_DAILY_STAKE_PCT = float(os.getenv("MAX_DAILY_STAKE_PCT", "0.20"))
+MIN_ODDS = float(os.getenv("MIN_ODDS", "1.50"))
+MAX_PARLAY = int(os.getenv("MAX_PARLAY", "4"))
+KELLY_FRACTION = float(os.getenv("KELLY_FRACTION", "0.25"))
+STOP_LOSS_STREAK = int(os.getenv("STOP_LOSS_STREAK", "3"))
+STOP_LOSS_FRACTION = float(os.getenv("STOP_LOSS_FRACTION", "0.125"))
 
 # Scraping
-ODDS_UPDATE_INTERVAL = 300   # 5 minutes
-SCORE_UPDATE_INTERVAL = 120  # 2 minutes
-INJURY_UPDATE_INTERVAL = 7200 # 2 hours
-SQUAD_VALUE_UPDATE_INTERVAL = 86400 # 24 hours
+ODDS_UPDATE_INTERVAL = int(os.getenv("ODDS_UPDATE_INTERVAL", "300"))
+SCORE_UPDATE_INTERVAL = int(os.getenv("SCORE_UPDATE_INTERVAL", "120"))
+INJURY_UPDATE_INTERVAL = int(os.getenv("INJURY_UPDATE_INTERVAL", "7200"))
+SQUAD_VALUE_UPDATE_INTERVAL = int(os.getenv("SQUAD_VALUE_UPDATE_INTERVAL", "86400"))
+
+# Security (optional — leave empty for local dev without auth)
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "")
+
+# Server
+HOST = os.getenv("HOST", "127.0.0.1")
+PORT = int(os.getenv("PORT", "8000"))
+RELOAD = os.getenv("RELOAD", "false").lower() in ("1", "true", "yes")
 
 # APIs (set via env vars)
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "")

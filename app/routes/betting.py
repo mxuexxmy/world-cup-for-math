@@ -1,17 +1,14 @@
 """Betting recommendation route."""
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
-from jinja2 import Environment, FileSystemLoader
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from pathlib import Path
 
+from app.templates_env import jinja_env
 from app.models.database import get_db
 from app.models.prediction import BetRecommendation
 
 router = APIRouter(prefix="/betting", tags=["Betting"])
-templates_dir = Path(__file__).resolve().parent.parent / "templates"
-jinja_env = Environment(loader=FileSystemLoader(str(templates_dir)))
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -83,9 +80,11 @@ async def cancel_bet_entry(bet_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(BetLedger).where(BetLedger.id == bet_id))
     bet = result.scalar_one_or_none()
     if not bet:
-        return {"error": "Bet not found"}
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Bet not found")
     if bet.result != "pending":
-        return {"error": "Cannot cancel settled bet"}
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="Cannot cancel settled bet")
     await db.delete(bet)
     await db.commit()
     return {"status": "ok", "cancelled": bet_id}

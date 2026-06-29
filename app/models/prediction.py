@@ -115,12 +115,21 @@ class BetLedger(Base):
     recommendation_id = Column(Integer, ForeignKey("bet_recommendations.id"), nullable=True)
     match_id = Column(Integer, ForeignKey("matches.id"), nullable=False)
     bet_type = Column(String(20), default="单关")  # 单关/2串1/3串1/4串1
-    selection = Column(String(20), default="")     # 胜/平/负
+    selection = Column(String(20), default="")     # 胜/平/负 (single) or summary for parlay
+    legs_json = Column(Text, nullable=True)        # Parlay legs [{match_id, selection, odds, result}]
     stake = Column(Float, default=0.0)             # Amount wagered
-    odds = Column(Float, default=1.0)              # Odds at time of bet
+    odds = Column(Float, default=1.0)              # Odds at time of bet (combined for parlays)
     result = Column(String(10), default="pending") # pending/won/lost/void
     profit = Column(Float, default=0.0)            # Profit (negative = loss)
     created_at = Column(DateTime, default=datetime.utcnow)
     settled_at = Column(DateTime, nullable=True)
 
     recommendation = relationship("BetRecommendation")
+
+    def get_legs(self):
+        if not self.legs_json:
+            return []
+        return json.loads(self.legs_json)
+
+    def set_legs(self, legs: list):
+        self.legs_json = json.dumps(legs, ensure_ascii=False)

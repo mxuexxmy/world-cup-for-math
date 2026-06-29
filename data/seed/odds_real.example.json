@@ -1,0 +1,8 @@
+{
+  "matches": {
+    "MEX-RSA": {"win": 1.85, "draw": 3.40, "lose": 4.20},
+    "KOR-CZE": {"win": 2.60, "draw": 3.10, "lose": 2.70},
+    "CAN-BIH": {"win": 1.95, "draw": 3.30, "lose": 3.80},
+    "USA-AUS": {"win": 1.70, "draw": 3.60, "lose": 4.80}
+  }
+}

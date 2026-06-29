@@ -18,11 +18,16 @@ class OddsParser:
 
     @classmethod
     def load_real_odds(cls) -> dict:
-        """Load real竞彩赔率 from JSON file."""
+        """Load竞彩赔率 from JSON file (example fallback if missing)."""
         if cls._real_odds is None:
-            path = Path(__file__).resolve().parent.parent.parent / "data" / "seed" / "odds_real.json"
-            with open(path, "r", encoding="utf-8") as f:
-                cls._real_odds = json.load(f)
+            base = Path(__file__).resolve().parent.parent.parent / "data" / "seed"
+            for name in ("odds_real.json", "odds_real.example.json"):
+                path = base / name
+                if path.exists():
+                    with open(path, "r", encoding="utf-8") as f:
+                        cls._real_odds = json.load(f)
+                    return cls._real_odds
+            cls._real_odds = {"matches": {}}
         return cls._real_odds
 
     @classmethod

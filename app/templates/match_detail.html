@@ -113,9 +113,10 @@
             <p style="color:var(--text-muted);">预测尚未生成</p>
             <button class="btn btn-primary" style="margin-top:0.5rem;"
                     hx-post="/api/predictions/generate/{{ match.id }}"
-                    hx-target="body" hx-swap="outerHTML">
+                    hx-target="#predict-status" hx-swap="innerHTML">
                 🔮 生成预测
             </button>
+            <div id="predict-status" style="margin-top:0.5rem;"></div>
         </div>
         {% endif %}
 

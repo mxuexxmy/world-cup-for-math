@@ -53,10 +53,12 @@
         <!-- Update Odds -->
         <div class="card">
             <div class="card-header">🎲 手动录入赔率</div>
-            <form method="POST" action="/admin/match/1/odds">
+            <form method="POST" action="/admin/match/{{ matches[0].id if matches else 1 }}/odds" id="odds-form">
                 <div class="form-group">
                     <label>比赛ID</label>
-                    <input type="number" name="match_id_placeholder" placeholder="输入比赛ID">
+                    <input type="number" name="match_id_display" id="odds-match-id"
+                           value="{{ matches[0].id if matches else '' }}" placeholder="输入比赛ID"
+                           onchange="document.getElementById('odds-form').action='/admin/match/'+this.value+'/odds'">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -84,19 +86,19 @@
                 🔄 重新运行投注优化
             </button>
             <button class="btn" style="width:100%; background:var(--blue); color:#fff;"
-                    onclick="alert('TODO: 触发全局重预测')">
+                    hx-post="/admin/predict-all" hx-target="#predict-result" hx-swap="innerHTML">
                 🔮 生成全部预测
             </button>
+            <div id="predict-result" style="margin-top:0.5rem;font-size:0.85rem;"></div>
         </div>
 
         <!-- System Info -->
         <div class="card">
             <div class="card-header">📊 系统状态</div>
             <div style="font-size:0.85rem;">
-                <p>比赛总数: <strong>104</strong></p>
-                <p>小组赛: <strong>72</strong></p>
-                <p>淘汰赛: <strong>32</strong></p>
-                <p>球队: <strong>48</strong></p>
+                <p>比赛总数: <strong>{{ match_count }}</strong></p>
+                <p>球队: <strong>{{ team_count }}</strong></p>
+                <p>已生成预测: <strong>{{ pred_count }}</strong></p>
                 <p>开赛日期: <strong>2026-06-11</strong></p>
                 <p>决赛: <strong>2026-07-19</strong></p>
             </div>

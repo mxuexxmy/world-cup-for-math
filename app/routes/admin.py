@@ -1,25 +1,23 @@
 """Admin panel routes."""
-from fastapi import APIRouter, Request, Depends, Form
+from fastapi import APIRouter, Request, Depends, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
-from jinja2 import Environment, FileSystemLoader
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from pathlib import Path
+from sqlalchemy import select, func
 from datetime import datetime
 
+from app.auth import require_admin
+from app.templates_env import jinja_env
 from app.models.database import get_db
 from app.models.match import Match
 from app.models.odds import Odds
 from app.models.team import Team
+from app.models.prediction import Prediction, BetLedger
 
-router = APIRouter(prefix="/admin", tags=["Admin"])
-templates_dir = Path(__file__).resolve().parent.parent / "templates"
-jinja_env = Environment(loader=FileSystemLoader(str(templates_dir)))
+router = APIRouter(prefix="/admin", tags=["Admin"], dependencies=[Depends(require_admin)])
 
 
 @router.get("/", response_class=HTMLResponse)
 async def admin_panel(request: Request, db: AsyncSession = Depends(get_db)):
-    """Admin panel main page."""
     result = await db.execute(
         select(Match).where(Match.status.in_(["scheduled", "live"]))
         .order_by(Match.match_date).limit(50)
@@ -29,11 +27,18 @@ async def admin_panel(request: Request, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Team).order_by(Team.name_cn))
     teams = result.scalars().all()
 
+    match_count = await db.scalar(select(func.count()).select_from(Match))
+    team_count = await db.scalar(select(func.count()).select_from(Team))
+    pred_count = await db.scalar(select(func.count()).select_from(Prediction))
+
     template = jinja_env.get_template("admin.html")
     html = template.render(
         request=request,
         matches=matches,
         teams=teams,
+        match_count=match_count,
+        team_count=team_count,
+        pred_count=pred_count,
         title="管理后台",
     )
     return HTMLResponse(html)
@@ -46,17 +51,10 @@ async def update_match_result(
     away_score: int = Form(...),
     db: AsyncSession = Depends(get_db),
 ):
-    """Update match result."""
-    result = await db.execute(select(Match).where(Match.id == match_id))
-    match = result.scalar_one_or_none()
-    if not match:
-        return {"error": "Match not found"}
-
-    match.home_score = home_score
-    match.away_score = away_score
-    match.status = "finished"
-    await db.commit()
-
+    from app.services.scraper import FifaMatchSync
+    result = await FifaMatchSync.manual_score_update(db, match_id, home_score, away_score)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
     return RedirectResponse(url="/admin?updated=1", status_code=303)
 
 
@@ -68,7 +66,6 @@ async def update_odds(
     lose_odds: float = Form(None),
     db: AsyncSession = Depends(get_db),
 ):
-    """Update odds for a match."""
     result = await db.execute(select(Odds).where(Odds.match_id == match_id))
     odds = result.scalar_one_or_none()
 
@@ -83,19 +80,28 @@ async def update_odds(
     if lose_odds is not None:
         odds.lose_odds = lose_odds
     odds.updated_at = datetime.utcnow()
+    odds.source = "手动录入"
 
     await db.commit()
     return RedirectResponse(url="/admin?updated=1", status_code=303)
 
 
-# Separate router for API endpoints (without /admin prefix)
-api_router = APIRouter(prefix="", tags=["Odds"])
+@router.post("/predict-all")
+async def admin_predict_all(db: AsyncSession = Depends(get_db)):
+    from app.services.predictor import PredictionEngine
+    from app.services.external_factors import ExternalFactorsService
 
-
-@api_router.post("/api/odds/update")
-async def update_odds_from_json(request: Request, db: AsyncSession = Depends(get_db)):
-    """Update odds from structured JSON data (竞彩官方赔率)."""
-    from app.services.odds_scraper import OddsUpdater
-    data = await request.json()
-    count = await OddsUpdater.update_odds_from_json(db, data)
-    return {"status": "ok", "updated": count}
+    engine = PredictionEngine(db)
+    result = await db.execute(
+        select(Match).where(Match.status == "scheduled").order_by(Match.match_date)
+    )
+    matches = result.scalars().all()
+    count = 0
+    for match in matches:
+        try:
+            await ExternalFactorsService.evaluate_match(db, match.id)
+            await engine.predict_match(match.id)
+            count += 1
+        except Exception as e:
+            print(f"[Admin] predict {match.id}: {e}")
+    return {"status": "ok", "predicted": count, "total": len(matches)}

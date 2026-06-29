@@ -1,4 +1,6 @@
 """SQLAlchemy database engine and session management."""
+from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
@@ -18,6 +20,16 @@ class Base(DeclarativeBase):
     pass
 
 
+def migrate_db_sync() -> None:
+    """Apply Alembic migrations to latest revision."""
+    from alembic import command
+    from alembic.config import Config
+
+    root = Path(__file__).resolve().parents[2]
+    cfg = Config(str(root / "alembic.ini"))
+    command.upgrade(cfg, "head")
+
+
 async def get_db():
     """FastAPI dependency: yields an async database session."""
     async with async_session_factory() as session:
@@ -28,11 +40,10 @@ async def get_db():
 
 
 async def init_db():
-    """Create all tables."""
-    async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    """Ensure schema is up to date via Alembic."""
+    migrate_db_sync()
 
 
 def init_db_sync():
-    """Create all tables synchronously (for seeding)."""
-    Base.metadata.create_all(sync_engine)
+    """Migrate schema synchronously (for seeding)."""
+    migrate_db_sync()

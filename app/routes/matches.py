@@ -1,18 +1,15 @@
 """Match detail route."""
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
-from jinja2 import Environment, FileSystemLoader
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from pathlib import Path
 
+from app.templates_env import jinja_env
 from app.models.database import get_db
 from app.models.match import Match
 
 router = APIRouter(prefix="/match", tags=["Matches"])
-templates_dir = Path(__file__).resolve().parent.parent / "templates"
-jinja_env = Environment(loader=FileSystemLoader(str(templates_dir)))
 
 
 @router.get("/{match_id}", response_class=HTMLResponse)

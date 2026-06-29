@@ -2,19 +2,15 @@
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
-from jinja2 import Environment, FileSystemLoader
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from sqlalchemy.orm import selectinload
-from pathlib import Path
-
+from app.templates_env import jinja_env
 from app.models.database import get_db
 from app.models.match import Match
 from app.models.team import Team
 
 router = APIRouter(prefix="", tags=["Dashboard"])
-templates_dir = Path(__file__).resolve().parent.parent / "templates"
-jinja_env = Environment(loader=FileSystemLoader(str(templates_dir)))
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -91,7 +87,7 @@ async def predict_all_matches(db: AsyncSession = Depends(get_db)):
     now_bj = datetime.utcnow() + timedelta(hours=8)
 
     result = await db.execute(
-        sel(Match).where(Match.status == "scheduled").limit(30)
+        sel(Match).where(Match.status == "scheduled").order_by(Match.match_date)
     )
     matches = result.scalars().all()
 

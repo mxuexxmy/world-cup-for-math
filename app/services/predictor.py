@@ -16,6 +16,8 @@ from app.services.elo import EloService
 from app.services.squad_service import SquadService
 from app.services.external_factors import ExternalFactorsService
 from app.services.feature_engine import FeatureEngine
+from app.config import ELO_WEIGHT, POISSON_WEIGHT, ML_WEIGHT
+from app.geo import city_to_host_country
 
 
 class PredictionEngine:
@@ -55,7 +57,8 @@ class PredictionEngine:
 
         # Get home advantage bonus
         home_bonus = EloService.get_home_bonus(
-            home.is_host, home.host_country, match.city, home.confederation
+            home.is_host, home.host_country,
+            city_to_host_country(match.city), home.confederation
         )
 
         # === ENSEMBLE PREDICTION ===
@@ -112,11 +115,10 @@ class PredictionEngine:
         total_goals_probs = self._total_goals_distribution(score_probs)
 
         # 6. Ensemble blending
-        elo_weight = 0.40
-        poisson_weight = 0.35
-        # ML (XGBoost/GradientBoosting) weight — low initially
-        ml_weight = 0.25
-        ml_home, ml_draw, ml_away = sim_home, sim_draw, sim_away  # fallback
+        elo_weight = ELO_WEIGHT
+        poisson_weight = POISSON_WEIGHT
+        ml_weight = ML_WEIGHT
+        ml_home, ml_draw, ml_away = sim_home, sim_draw, sim_away
 
         try:
             features = self.feature_engine.build_features(
@@ -124,7 +126,7 @@ class PredictionEngine:
             )
             ml_home, ml_draw, ml_away = self._ml_predict(features)
         except Exception:
-            pass  # Use Poisson as ML fallback
+            pass
 
         # Blend
         final_home = elo_weight * elo_home + poisson_weight * sim_home + ml_weight * ml_home
@@ -194,10 +196,13 @@ class PredictionEngine:
             pred.elo_prob_home = round(elo_home, 4)
             pred.elo_prob_draw = round(elo_draw, 4)
             pred.elo_prob_away = round(elo_away, 4)
+            pred.xgboost_prob_home = round(ml_home, 4)
+            pred.xgboost_prob_draw = round(ml_draw, 4)
+            pred.xgboost_prob_away = round(ml_away, 4)
         else:
             pred = Prediction(
                 match_id=match_id,
-                model_version="1.1",
+                model_version="1.2",
                 prob_home_win=round(final_home, 4),
                 prob_draw=round(final_draw, 4),
                 prob_away_win=round(final_away, 4),
@@ -209,6 +214,9 @@ class PredictionEngine:
                 elo_prob_home=round(elo_home, 4),
                 elo_prob_draw=round(elo_draw, 4),
                 elo_prob_away=round(elo_away, 4),
+                xgboost_prob_home=round(ml_home, 4),
+                xgboost_prob_draw=round(ml_draw, 4),
+                xgboost_prob_away=round(ml_away, 4),
             )
             self.db.add(pred)
 

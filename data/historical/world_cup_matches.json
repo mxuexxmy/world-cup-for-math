@@ -1,0 +1,1285 @@
+{
+  "source": "statsbomb/open-data",
+  "matches": [
+    {
+      "year": 2018,
+      "date": "2018-06-14",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "RUS",
+      "away": "KSA",
+      "home_score": 5,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-15",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "EGY",
+      "away": "URU",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-15",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POR",
+      "away": "ESP",
+      "home_score": 3,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-15",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "MAR",
+      "away": "IRN",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-16",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ARG",
+      "away": "ISL",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-16",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CRO",
+      "away": "NGA",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-16",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "FRA",
+      "away": "AUS",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-16",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "PER",
+      "away": "DEN",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-17",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "GER",
+      "away": "MEX",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-17",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CRC",
+      "away": "SRB",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-17",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BRA",
+      "away": "SUI",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-18",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SWE",
+      "away": "KOR",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-18",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BEL",
+      "away": "PAN",
+      "home_score": 3,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-18",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "TUN",
+      "away": "ENG",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-19",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POL",
+      "away": "SEN",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-19",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "RUS",
+      "away": "EGY",
+      "home_score": 3,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-19",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "COL",
+      "away": "JPN",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-20",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "IRN",
+      "away": "ESP",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-20",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "URU",
+      "away": "KSA",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-20",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POR",
+      "away": "MAR",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-21",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "FRA",
+      "away": "PER",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-21",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ARG",
+      "away": "CRO",
+      "home_score": 0,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-21",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "DEN",
+      "away": "AUS",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SRB",
+      "away": "SUI",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BRA",
+      "away": "CRC",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "NGA",
+      "away": "ISL",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "KOR",
+      "away": "MEX",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "GER",
+      "away": "SWE",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BEL",
+      "away": "TUN",
+      "home_score": 5,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ENG",
+      "away": "PAN",
+      "home_score": 6,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POL",
+      "away": "COL",
+      "home_score": 0,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "JPN",
+      "away": "SEN",
+      "home_score": 2,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "IRN",
+      "away": "POR",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "URU",
+      "away": "RUS",
+      "home_score": 3,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ESP",
+      "away": "MAR",
+      "home_score": 2,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "KSA",
+      "away": "EGY",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ISL",
+      "away": "CRO",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "AUS",
+      "away": "PER",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "NGA",
+      "away": "ARG",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "DEN",
+      "away": "FRA",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SRB",
+      "away": "BRA",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SUI",
+      "away": "CRC",
+      "home_score": 2,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "MEX",
+      "away": "SWE",
+      "home_score": 0,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "KOR",
+      "away": "GER",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "PAN",
+      "away": "TUN",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "JPN",
+      "away": "POL",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ENG",
+      "away": "BEL",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SEN",
+      "away": "COL",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-30",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "FRA",
+      "away": "ARG",
+      "home_score": 4,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-06-30",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "URU",
+      "away": "POR",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-01",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "CRO",
+      "away": "DEN",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-01",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "ESP",
+      "away": "RUS",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-02",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "BEL",
+      "away": "JPN",
+      "home_score": 3,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-02",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "BRA",
+      "away": "MEX",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-03",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "COL",
+      "away": "ENG",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-03",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "SWE",
+      "away": "SUI",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-06",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "BRA",
+      "away": "BEL",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-06",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "URU",
+      "away": "FRA",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-07",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "SWE",
+      "away": "ENG",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-07",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "RUS",
+      "away": "CRO",
+      "home_score": 2,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-10",
+      "stage": "\u534a\u51b3\u8d5b",
+      "home": "FRA",
+      "away": "BEL",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-11",
+      "stage": "\u534a\u51b3\u8d5b",
+      "home": "CRO",
+      "away": "ENG",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-14",
+      "stage": "3rd Place Final",
+      "home": "BEL",
+      "away": "ENG",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2018,
+      "date": "2018-07-15",
+      "stage": "\u51b3\u8d5b",
+      "home": "FRA",
+      "away": "CRO",
+      "home_score": 4,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-20",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "QAT",
+      "away": "ECU",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-21",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ENG",
+      "away": "IRN",
+      "home_score": 6,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-21",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SEN",
+      "away": "NED",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-21",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "USA",
+      "away": "WAL",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "DEN",
+      "away": "TUN",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "MEX",
+      "away": "POL",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ARG",
+      "away": "KSA",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-22",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "FRA",
+      "away": "AUS",
+      "home_score": 4,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "MAR",
+      "away": "CRO",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "GER",
+      "away": "JPN",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BEL",
+      "away": "CAN",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-23",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ESP",
+      "away": "CRC",
+      "home_score": 7,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SUI",
+      "away": "CMR",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POR",
+      "away": "GHA",
+      "home_score": 3,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BRA",
+      "away": "SRB",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-24",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "URU",
+      "away": "KOR",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "NED",
+      "away": "ECU",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ENG",
+      "away": "USA",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "WAL",
+      "away": "IRN",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-25",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "QAT",
+      "away": "SEN",
+      "home_score": 1,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POL",
+      "away": "KSA",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "FRA",
+      "away": "DEN",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "TUN",
+      "away": "AUS",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-26",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ARG",
+      "away": "MEX",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "JPN",
+      "away": "CRC",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ESP",
+      "away": "GER",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BEL",
+      "away": "MAR",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-27",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CRO",
+      "away": "CAN",
+      "home_score": 4,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "BRA",
+      "away": "SUI",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POR",
+      "away": "URU",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CMR",
+      "away": "SRB",
+      "home_score": 3,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-28",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "KOR",
+      "away": "GHA",
+      "home_score": 2,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-29",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "IRN",
+      "away": "USA",
+      "home_score": 0,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-29",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "WAL",
+      "away": "ENG",
+      "home_score": 0,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-29",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "NED",
+      "away": "QAT",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-29",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "ECU",
+      "away": "SEN",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-30",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "TUN",
+      "away": "FRA",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-30",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "AUS",
+      "away": "DEN",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-30",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "KSA",
+      "away": "MEX",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-11-30",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "POL",
+      "away": "ARG",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-01",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CAN",
+      "away": "MAR",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-01",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CRO",
+      "away": "BEL",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-01",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "JPN",
+      "away": "ESP",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-01",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CRC",
+      "away": "GER",
+      "home_score": 2,
+      "away_score": 4,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-02",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "SRB",
+      "away": "SUI",
+      "home_score": 2,
+      "away_score": 3,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-02",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "GHA",
+      "away": "URU",
+      "home_score": 0,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-02",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "CMR",
+      "away": "BRA",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-02",
+      "stage": "\u5c0f\u7ec4\u8d5b",
+      "home": "KOR",
+      "away": "POR",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-03",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "ARG",
+      "away": "AUS",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-03",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "NED",
+      "away": "USA",
+      "home_score": 3,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-04",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "ENG",
+      "away": "SEN",
+      "home_score": 3,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-04",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "FRA",
+      "away": "POL",
+      "home_score": 3,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-05",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "JPN",
+      "away": "CRO",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-05",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "BRA",
+      "away": "KOR",
+      "home_score": 4,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-06",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "POR",
+      "away": "SUI",
+      "home_score": 6,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-06",
+      "stage": "1/16\u51b3\u8d5b",
+      "home": "MAR",
+      "away": "ESP",
+      "home_score": 0,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-09",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "NED",
+      "away": "ARG",
+      "home_score": 2,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-09",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "CRO",
+      "away": "BRA",
+      "home_score": 1,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-10",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "MAR",
+      "away": "POR",
+      "home_score": 1,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-10",
+      "stage": "1/4\u51b3\u8d5b",
+      "home": "ENG",
+      "away": "FRA",
+      "home_score": 1,
+      "away_score": 2,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-13",
+      "stage": "\u534a\u51b3\u8d5b",
+      "home": "ARG",
+      "away": "CRO",
+      "home_score": 3,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-14",
+      "stage": "\u534a\u51b3\u8d5b",
+      "home": "FRA",
+      "away": "MAR",
+      "home_score": 2,
+      "away_score": 0,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-17",
+      "stage": "3rd Place Final",
+      "home": "CRO",
+      "away": "MAR",
+      "home_score": 2,
+      "away_score": 1,
+      "neutral": true
+    },
+    {
+      "year": 2022,
+      "date": "2022-12-18",
+      "stage": "\u51b3\u8d5b",
+      "home": "ARG",
+      "away": "FRA",
+      "home_score": 3,
+      "away_score": 3,
+      "neutral": true
+    }
+  ]
+}
