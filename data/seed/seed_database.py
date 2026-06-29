@@ -12,8 +12,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from app.config import FIFA_COMPETITION_ID, FIFA_SEASON_ID
 
 from app.models.database import init_db_sync, SyncSession
-from app.models.team import Team
+from app.models.team import Team, TeamSquad
 from app.models.match import Match, Group
+from app.models.odds import Odds
+from app.models.external_factors import ExternalFactors
+from app.models.prediction import Prediction, BetRecommendation, MatchResult, BetLedger
 from app.config import SEED_DIR
 from data.seed.seed_squads import seed_squads
 
@@ -204,6 +207,33 @@ def load_knockout_schedule() -> list:
         matches = json.load(f)["matches"]
     print(f"[OK] Loaded {len(matches)} knockout matches from knockout_schedule.json")
     return matches
+
+
+def clear_seed_data(session) -> None:
+    """Remove tournament data so seed can run again on an existing database."""
+    from sqlalchemy import delete, update
+
+    existing_teams = session.query(Team).count()
+    if existing_teams == 0:
+        return
+
+    print(f"[INFO] Clearing existing seed data ({existing_teams} teams) ...")
+    for model in (
+        BetLedger,
+        BetRecommendation,
+        MatchResult,
+        Prediction,
+        ExternalFactors,
+        Odds,
+        Match,
+        TeamSquad,
+    ):
+        session.execute(delete(model))
+    session.execute(update(Team).values(group_id=None))
+    session.execute(delete(Team))
+    session.execute(delete(Group))
+    session.flush()
+    print("[OK] Cleared existing seed data")
 
 
 def seed_teams(session):
@@ -398,6 +428,7 @@ if __name__ == "__main__":
     init_db_sync()
     session = SyncSession()
     try:
+        clear_seed_data(session)
         team_map = seed_teams(session)
         seed_groups(session, team_map)
         n_players = seed_squads(session, team_map)
