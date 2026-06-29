@@ -41,7 +41,7 @@
 1. 安装 [Python 3.10+](https://www.python.org/downloads/)，安装时勾选 **Add python.exe to PATH**
 2. 详细步骤见项目根目录 **`使用说明.txt`**（纯文本，双击用记事本打开）
 3. 双击 **`首次安装.bat`**（仅需一次，含虚拟环境与模型训练）
-4. 以后双击 **`启动.bat`** 即可使用
+4. 以后双击 **`启动.bat`** 打开，双击 **`关闭.bat`** 停止
 5. 可选：**`重置数据.bat`** / **`更新模型.bat`**
 
 > `.bat` 为 **GBK 编码**（适配中文 Windows 的 cmd）。若从 Git 克隆后双击脚本时中文乱码，在项目根目录执行 `python scripts/generate_windows_bats.py` 重新生成即可。

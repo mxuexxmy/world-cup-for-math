@@ -18,7 +18,7 @@ echo   世界杯赌神 - 正在启动
 echo ========================================
 echo.
 echo 启动后浏览器将自动打开。
-echo 关闭标题为 WorldCup-Math 的黑色窗口即可停止服务。
+echo 也可双击「关闭.bat」停止服务。
 echo.
 
 start "WorldCup-Math" /D "%ROOT%" "%PY%" "%ROOT%\run.py"
