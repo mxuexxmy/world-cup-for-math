@@ -1,0 +1,2 @@
+# Keep GBK-encoded Windows launchers byte-identical on all platforms.
+*.bat binary

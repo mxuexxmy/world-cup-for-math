@@ -44,6 +44,8 @@
 4. 以后双击 **`启动.bat`** 即可使用
 5. 可选：**`重置数据.bat`** / **`更新模型.bat`**
 
+> `.bat` 为 **GBK 编码**（适配中文 Windows 的 cmd）。若从 Git 克隆后双击脚本时中文乱码，在项目根目录执行 `python scripts/generate_windows_bats.py` 重新生成即可。
+
 ### 命令行
 
 ```bash
