@@ -31,7 +31,7 @@ python run.py                       # 启动 http://localhost:8000
 | 后端 | Python · FastAPI · SQLAlchemy (aiosqlite) |
 | 机器学习 | scikit-learn GradientBoosting · scipy 泊松分布 |
 | 前端 | Jinja2 · Chart.js · HTMX |
-| 数据 | FIFA API · sporttery.cn · Transfermarkt |
+| 数据 | FIFA API · 种子 JSON · 竞彩转载/模型生成 |
 
 ## 📁 项目结构
 
@@ -49,7 +49,7 @@ python run.py                       # 启动 http://localhost:8000
 │   │   ├── odds_scraper.py     # 竞彩赔率更新
 │   │   └── feature_engine.py   # 33 维特征工程
 │   └── templates/              # Jinja2 HTML 模板
-├── data/seed/                  # 种子数据 (48队/12组/104场)
+├── data/seed/                  # 种子数据 (48队/12组/赛程/knockout_schedule.json)
 ├── run.py
 └── requirements.txt
 ```
@@ -66,14 +66,22 @@ python run.py                       # 启动 http://localhost:8000
 
 ## 📡 数据来源
 
-| 数据 | 来源 |
-|------|------|
-| 实时比分 | FIFA 官方 API |
-| 竞彩赔率 | 中国体育彩票竞彩网 |
-| 球队排名 | FIFA 官方排名 (2026.6) |
-| 球员身价 | Transfermarkt |
-| 平均年龄 | 官方 26 人名单 |
-| 球场数据 | FIFA 官方场馆信息 |
+| 数据 | 实际来源 | 说明 |
+|------|----------|------|
+| 淘汰赛赛程/对阵 | FIFA API `calendar/matches` | 种子时拉取，离线兜底 `data/seed/knockout_schedule.json` |
+| 实时比分 / 球场 / 裁判 | FIFA API（同上，`fifa_match_id` 匹配） | 每 120s 自动刷新，或 `POST /api/refresh` |
+| 小组赛赛程 | `seed_database.py` 手写赛程表 | 与 FIFA 官网对齐，尚未全自动拉取 |
+| 竞彩赔率 | 新浪转载 / 本地 JSON / 模型生成 | 非 sporttery.cn 直连；可 `POST /api/odds/update` 注入 |
+| 球队排名 / 身价 / 年龄 | `data/seed/teams.json` 快照 | 初始化时写入，运行期不自动更新 |
+
+### 数据同步流程
+
+```
+python data/seed/seed_database.py   # 建库 + 自检（104 场、淘汰赛非占位）
+python run.py                         # 启动后每 120s 从 FIFA 同步比分与待定对阵
+```
+
+下届大赛只需在 `app/config.py` 或环境变量中更新 `FIFA_SEASON_ID`，然后重新执行种子脚本。
 
 ## 🔗 API
 
@@ -94,6 +102,8 @@ POST /api/place-bet/{id}?cancel=1  撤销
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
+| `FIFA_COMPETITION_ID` | 17 | FIFA 世界杯赛事 ID |
+| `FIFA_SEASON_ID` | 285023 | 2026 世界杯赛季 ID |
 | `ELO_K_FACTOR` | 60 | Elo 灵敏度 |
 | `KELLY_FRACTION` | 0.25 | 凯利保守系数 |
 | `MAX_STAKE_PCT` | 0.05 | 单注上限 |

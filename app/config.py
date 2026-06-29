@@ -16,6 +16,10 @@ WORLD_CUP_START = "2026-06-11"
 WORLD_CUP_END = "2026-07-19"
 TOTAL_MATCHES = 104  # 48 teams → 104 matches total
 
+# FIFA official API identifiers (World Cup 26™)
+FIFA_COMPETITION_ID = os.getenv("FIFA_COMPETITION_ID", "17")
+FIFA_SEASON_ID = os.getenv("FIFA_SEASON_ID", "285023")
+
 # Elo config
 ELO_K_FACTOR = 60
 ELO_HOME_ADVANTAGE = 100

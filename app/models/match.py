@@ -31,6 +31,7 @@ class Match(Base):
     __tablename__ = "matches"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    fifa_match_id = Column(String(20), nullable=True, unique=True, index=True)
     match_date = Column(DateTime, nullable=False, index=True)
     stage = Column(String(30), default="小组赛")  # 小组赛, 1/16决赛, 1/8决赛, 1/4决赛, 半决赛, 季军赛, 决赛
     matchday = Column(Integer, default=1)         # Matchday within group stage
